@@ -8,8 +8,8 @@ class ArcadierApi
     private $clientId;
     private $clientSecret;
     protected $adminId;
-    
-    function __construct($clientId,$clientSecret)
+
+    function __construct($clientId, $clientSecret)
     {
         $this->baseUrl = $this->GetBaseUrl();
         $this->packageId = $this->GetPackageId();
@@ -73,14 +73,15 @@ class ArcadierApi
         if ($response != null) {
             $result = $response;
         }
-        
+
         return $result;
     }
 
-    function CreateCtRow($tableName, $options){
+    function CreateCtRow($tableName, $options)
+    {
         $result = null;
 
-        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName . '/rows';
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/' . $tableName . '/rows';
 
         $body = $options;
 
@@ -88,14 +89,15 @@ class ArcadierApi
         if ($response != null) {
             $result = $response;
         }
-        
+
         return $result;
     }
 
-    function EditCtRow($tableName, $options, $rowId){
+    function EditCtRow($tableName, $options, $rowId)
+    {
         $result = null;
 
-        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName . '/rows/' . $rowId;
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/' . $tableName . '/rows/' . $rowId;
 
         $body = $options;
 
@@ -103,19 +105,33 @@ class ArcadierApi
         if ($response != null) {
             $result = $response;
         }
-        
+
         return $result;
     }
 
     function SearchCt($tableName, $options)
     {
-        $result = null ;
+        $result = null;
 
-        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName;
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/' . $tableName;
 
         $body = $options;
 
         $response = $this->callAPI('POST', $this->adminToken, $url, json_encode($body));
+        if ($response != null) {
+            $result = $response;
+        }
+
+        return $result;
+    }
+
+    function GetAllCtContent($tableName)
+    {
+        $result = null;
+
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/' . $tableName;
+
+        $response = $this->callAPI('GET', $this->adminToken, $url);
         if ($response != null) {
             $result = $response;
         }
