@@ -9,14 +9,43 @@ class CustomLogger
     protected $sendEmails;
     protected $emailsToBeSend;
     protected $emailfrom;
-    protected $emailBody;
     protected $emailSubject;
     private $arcadier;
 
     function __construct($clientId, $clientSecret)
     {
         $this->arcadier = new ArcadierApi($clientId, $clientSecret);
+    }
 
+    function Log($payloadToLog, $emailBody= null)
+    {
+        //here send email 
+    }
+
+    function SendEmails($emailBody= null)
+    {
+        $this->GetEmailParams();
+
+        //Execute only if flag is activated
+        if (boolval($this->sendEmails) && $emailBody != null) {
+            foreach ($this->GetEmails() as $email) {
+                $this->arcadier->SendEmail($this->emailfrom, $email, $emailBody, $this->emailSubject);
+            }
+        }
+    }
+
+    function StoreLogs()
+    {
+    //store in ct the log
+    }
+
+    function GetEmails()
+    {
+        return explode(",", $this->emailsToBeSend);
+    }
+
+    function GetEmailParams()
+    {
         $configParams = $this->arcadier->GetAllCtContent('Configuration');
 
         if ($configParams["TotalRecords"] == 0) {
@@ -37,29 +66,7 @@ class CustomLogger
         else {
             throw new Exception("Some error occur but is an unknown error.");
         }
-
     }
-
-    function Log()
-    {
-    //here send email 
-    }
-
-    function SendEmails()
-    {
-        //Execute only if flag is activated
-        if (boolval($this->sendEmails)) {
-            foreach ($this->GetEmails() as $email) {
-                $this->arcadier->SendEmail($this->emailfrom, $email, $this->emailBody, $this->emailSubject);
-            }
-        }
-    }
-
-    function GetEmails()
-    {
-        return explode(",", $this->emailsToBeSend);
-    }
-
 
 }
 
