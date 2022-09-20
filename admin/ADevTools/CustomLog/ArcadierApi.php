@@ -9,14 +9,13 @@ class ArcadierApi
     private $clientSecret;
     protected $adminId;
     
-    function __construct()
+    function __construct($clientId,$clientSecret)
     {
         $this->baseUrl = $this->GetBaseUrl();
         $this->packageId = $this->GetPackageId();
 
-        // $credentials = $this->GetMarketplaceKeys();
-        $this->clientId = 'K87hzKHnUIQbqnI5SWcevXTMcVG3BdWkoZIuZeGP';
-        $this->clientSecret = 'ddTVtnBauN_ypameedU91L6pmEIVsvqU8Ml4xT96lqdJM4BGUlk';
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
 
         $adminInfo = $this->GetAdminToken();
         $this->adminToken = $adminInfo['token'];
@@ -77,6 +76,53 @@ class ArcadierApi
         
         return $result;
     }
+
+    function CreateCtRow($tableName, $options){
+        $result = null;
+
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName . '/rows';
+
+        $body = $options;
+
+        $response = $this->callAPI('POST', $this->adminToken, $url, json_encode($body));
+        if ($response != null) {
+            $result = $response;
+        }
+        
+        return $result;
+    }
+
+    function EditCtRow($tableName, $options, $rowId){
+        $result = null;
+
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName . '/rows/' . $rowId;
+
+        $body = $options;
+
+        $response = $this->callAPI('PUT', $this->adminToken, $url, json_encode($body));
+        if ($response != null) {
+            $result = $response;
+        }
+        
+        return $result;
+    }
+
+    function SearchCt($tableName, $options)
+    {
+        $result = null ;
+
+        $url = $this->baseUrl . '/api/v2/plugins/' . $this->packageId . '/custom-tables/'. $tableName;
+
+        $body = $options;
+
+        $response = $this->callAPI('POST', $this->adminToken, $url, json_encode($body));
+        if ($response != null) {
+            $result = $response;
+        }
+
+        return $result;
+    }
+
 
     function callAPI($method, $access_token, $url, $data = false)
     {
