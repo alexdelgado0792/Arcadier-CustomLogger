@@ -1,6 +1,5 @@
 <?php
 
-
 require_once('ArcadierApi.php');
 
 class CustomLogger
@@ -17,12 +16,18 @@ class CustomLogger
         $this->arcadier = new ArcadierApi($clientId, $clientSecret);
     }
 
-    function Log($payloadToLog, $emailBody= null)
+    function Log($payloadToLog, $message, $fileName = null, $emailBody = null)
     {
-        //here send email 
+        $requestBody = $this->BuildLogRequest($payloadToLog, $message, $fileName);
+
+        //'{ "Payload" : ' . $payloadToLog . ', "Message" : ' . $message . ', "File" : ' . $fileName . '}';
+
+        $this->StoreLog($requestBody);
+
+        $this->SendEmails($emailBody);
     }
 
-    function SendEmails($emailBody= null)
+    private function SendEmails($emailBody = null)
     {
         $this->GetEmailParams();
 
@@ -34,38 +39,55 @@ class CustomLogger
         }
     }
 
-    function StoreLogs()
+    function StoreLog($requestBody)
     {
-    //store in ct the log
+        //store in ct the log
+        $this->arcadier->CreateCtRow("Log", $requestBody);
+
     }
 
-    function GetEmails()
+    private function GetEmails()
     {
         return explode(",", $this->emailsToBeSend);
     }
 
-    function GetEmailParams()
+    private function GetEmailParams(): bool
     {
+        $getParams = false;
         $configParams = $this->arcadier->GetAllCtContent('Configuration');
 
         if ($configParams["TotalRecords"] == 0) {
-            throw new Exception("At least one configuration must exists. Current is " . $configParams["TotalRecords"]);
-        }
+            $msg = "At least one configuration must exists. Current is " . $configParams["TotalRecords"];
+            $file = "CustomerLogger.php->GetEmailParams()";
+            $requestBody = $this->BuildLogRequest(null, $msg, $file);
 
-        if ($configParams["TotalRecords"] > 1) {
-            throw new Exception("Just one configuration must exists. Current is " . $configParams["TotalRecords"]);
+            $this->StoreLog($requestBody);
         }
+        else if ($configParams["TotalRecords"] > 1) {
+            $msg = "Just one configuration must exists. Current is " . $configParams["TotalRecords"];
+            $file = "CustomerLogger.php->GetEmailParams()";
+            $requestBody = $this->BuildLogRequest(null, $msg, $file);
 
-        if ($configParams["TotalRecords"] == 1) {
+            $this->StoreLog($requestBody);
+        }
+        else if ($configParams["TotalRecords"] == 1) {
             $this->sendEmails = $configParams["Records"]["SendEmail"];
             $this->emailsToBeSend = $configParams["Records"]["Emails"];
-            $this->emailBody = $configParams["Records"]["EmailBody"];
             $this->emailfrom = $configParams["Records"]["EmailFrom"];
             $this->emailSubject = $configParams["Records"]["EmailSubject"];
+            return true;
         }
-        else {
-            throw new Exception("Some error occur but is an unknown error.");
-        }
+
+        return $getParams;
+    }
+
+    private function BuildLogRequest($payloadToLog, $message, $fileName = null)
+    {
+        return [
+            "Payload" => json_encode($payloadToLog), //this should be json format
+            "Message" => $message,
+            "File" => $fileName,
+        ];
     }
 
 }
