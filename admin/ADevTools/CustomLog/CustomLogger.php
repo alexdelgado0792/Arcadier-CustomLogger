@@ -4,7 +4,6 @@ require_once('ArcadierApi.php');
 
 class CustomLogger
 {
-
     protected $sendEmails;
     protected $emailsToBeSend;
     protected $emailfrom;
@@ -41,9 +40,7 @@ class CustomLogger
 
     function StoreLog($requestBody)
     {
-        //store in ct the log
         $this->arcadier->CreateCtRow("Log", $requestBody);
-
     }
 
     private function GetEmails()
