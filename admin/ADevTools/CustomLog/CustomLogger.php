@@ -38,7 +38,7 @@ class CustomLogger
         }
     }
 
-    function StoreLog($requestBody)
+    private function StoreLog($requestBody)
     {
         $this->arcadier->CreateCtRow("Log", $requestBody);
     }
