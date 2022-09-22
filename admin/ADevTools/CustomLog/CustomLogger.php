@@ -19,8 +19,6 @@ class CustomLogger
     {
         $requestBody = $this->BuildLogRequest($payloadToLog, $message, $fileName);
 
-        //'{ "Payload" : ' . $payloadToLog . ', "Message" : ' . $message . ', "File" : ' . $fileName . '}';
-
         $this->StoreLog($requestBody);
 
         $this->SendEmails($emailBody);
@@ -29,8 +27,8 @@ class CustomLogger
     private function SendEmails($emailBody = null)
     {
         $this->GetEmailParams();
-
-        //Execute only if flag is activated
+        
+        //Execute only if flag is activated and a email body is supply
         if (boolval($this->sendEmails) && $emailBody != null) {
             foreach ($this->GetEmails() as $email) {
                 $this->arcadier->SendEmail($this->emailfrom, $email, $emailBody, $this->emailSubject);
@@ -54,24 +52,24 @@ class CustomLogger
         $configParams = $this->arcadier->GetAllCtContent('Configuration');
 
         if ($configParams["TotalRecords"] == 0) {
-            $msg = "At least one configuration must exists. Current is " . $configParams["TotalRecords"];
+            $msg = "At least one configuration must exists. Current is " + $configParams["TotalRecords"];
             $file = "CustomerLogger.php->GetEmailParams()";
             $requestBody = $this->BuildLogRequest(null, $msg, $file);
 
             $this->StoreLog($requestBody);
         }
         else if ($configParams["TotalRecords"] > 1) {
-            $msg = "Just one configuration must exists. Current is " . $configParams["TotalRecords"];
+            $msg = "Just one configuration must exists. Current is " + $configParams["TotalRecords"];
             $file = "CustomerLogger.php->GetEmailParams()";
             $requestBody = $this->BuildLogRequest(null, $msg, $file);
 
             $this->StoreLog($requestBody);
         }
         else if ($configParams["TotalRecords"] == 1) {
-            $this->sendEmails = $configParams["Records"]["SendEmail"];
-            $this->emailsToBeSend = $configParams["Records"]["Emails"];
-            $this->emailfrom = $configParams["Records"]["EmailFrom"];
-            $this->emailSubject = $configParams["Records"]["EmailSubject"];
+            $this->sendEmails = $configParams["Records"][0]["SendEmail"];
+            $this->emailsToBeSend = $configParams["Records"][0]["Emails"];
+            $this->emailfrom = $configParams["Records"][0]["EmailFrom"];
+            $this->emailSubject = $configParams["Records"][0]["EmailSubject"];
             return true;
         }
 
