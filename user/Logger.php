@@ -1,12 +1,14 @@
-<!-- 
-    Endpoint to sent logs via HTTP Request using authentication
-
- -->
 <?php 
+
+include('../admin/ADevTools/CustomLog/CustomLogger.php');
 
 $json = file_get_contents('php://input');
 $data = json_decode($json);
-// include('ADevTools/CustomLog/')
+
+$customLogger = new CustomLogger('CLIENT ID','CLIENT SECRET');
+
+$customLogger->Log($data->Payload, $data->Message, $data->FileName, $data->EmailBody);
+
+echo print_r('{"Result" : true }',true);
 
 ?>
-
