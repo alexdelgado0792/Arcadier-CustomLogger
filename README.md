@@ -45,6 +45,7 @@ SendEmail     | Integer       | 0 - not send email <br> 1 - to send email
 
 
 <br>
+
 Should look like this
 
 <br>
@@ -63,6 +64,7 @@ Payload       | String        | JSON payload to be store
 <br>
 
 Should look like this
+
 <br>
 
 ![custom table log](images/ct-Log.png)
