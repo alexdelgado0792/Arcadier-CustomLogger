@@ -4,10 +4,10 @@ require_once('ArcadierApi.php');
 
 class CustomLogger
 {
-    protected $sendEmails;
-    protected $emailsToBeSend;
-    protected $emailfrom;
-    protected $emailSubject;
+    private $sendEmails;
+    private $emailsToBeSend;
+    private $emailfrom;
+    private $emailSubject;
     private $arcadier;
 
     function __construct($clientId, $clientSecret)
