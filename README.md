@@ -163,3 +163,15 @@ $customLogger = new CustomLogger('CLIENT ID','CLIENT SECRET');// credentials fro
 
 $customLogger->Log($Payload, $Message, $FileName, $EmailBody);
 ```
+<br>
+
+# How to install plugin in Arcadier Developer Dashboard
+1. Download repository.
+2. Compress (.zip) the admin and user folder. 
+3. Login to Arcadier Plug-in Developer Dashboard.
+4. Create a new Plug-in.
+5. Create custom tables and custom field (if needed).
+6. Upload .zip file in the created Plug-in.
+7. Login into your marketplace admin portal.
+8. Go to Plug-in
+9. Search for the Plug-in and install it.
