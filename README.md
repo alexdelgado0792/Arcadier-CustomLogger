@@ -43,7 +43,7 @@ Emails        | String        | Emails who will receive the error.(separated by 
 EmailSubject  | String        | Email Subject.
 SendEmail     | Integer       | 0 - not send email <br> 1 - to send email
 
-
+**Once table is defined please create only one configuration using the arcadier's api.**
 <br>
 
 Should look like this
