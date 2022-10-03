@@ -26,6 +26,8 @@ The file structure of each Plug-in's source code:
 
 > user folder has the code that executes for the merchants and buyers.
 
+> ADevTools folder is where we can have more custom functionality that can be reuse in other plugins.
+
 <br>
 
 # Custom Tables
