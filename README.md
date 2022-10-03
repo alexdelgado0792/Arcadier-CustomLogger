@@ -73,6 +73,14 @@ Should look like this
 
 # How to use public endpoint
 
+**Configure public endpoint with correct marketplace credentials**
+
+Is requiere to change to the correct markatplace credentials in the [Logger.php](user/Logger.php) file.
+
+```php
+$customLogger = new CustomLogger('CLIENT ID','CLIENT SECRET');// credentials from your marketplace
+```
+
 **Endpoint Url**
 
 ``` Endpoint
