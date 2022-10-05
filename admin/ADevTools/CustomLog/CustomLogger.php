@@ -15,6 +15,16 @@ class CustomLogger
         $this->arcadier = new ArcadierApi($clientId, $clientSecret);
     }
 
+    /**
+    * Send some error or message to Arcadier's Custom Table. Also it can send an email if it's configured.
+    *
+    * @param string $payloadToLog Some text in json format that will be store.
+    * @param string $message Descriptive error or message.
+    * @param string $fileName File name where the error occur.
+    * @param string $emailBody Html body for the email.
+    * 
+    * @author Alejandro Delgado
+    */
     function Log($payloadToLog, $message, $fileName = null, $emailBody = null)
     {
         $requestBody = $this->BuildLogRequest($payloadToLog, $message, $fileName);
